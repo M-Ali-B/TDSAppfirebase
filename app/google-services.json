@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "684266342732",
+    "firebase_url": "https://tds-app-edf88.firebaseio.com",
+    "project_id": "tds-app-edf88",
+    "storage_bucket": "tds-app-edf88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684266342732:android:d13bace63c1f1377",
+        "android_client_info": {
+          "package_name": "com.github.ali.tdsappfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684266342732-6ufgjaaosedngosdrvprsd421krtrv6k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.ali.tdsappfirebase",
+            "certificate_hash": "0183b35dbaa6c7998ba148d392ac1312a24d5d77"
+          }
+        },
+        {
+          "client_id": "684266342732-aeeqpt6kpmsshk5ba6p3q1h2p2uq8qe8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1g84gcnLub0q-snT7cP4hDdexZjKaBSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684266342732-aeeqpt6kpmsshk5ba6p3q1h2p2uq8qe8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

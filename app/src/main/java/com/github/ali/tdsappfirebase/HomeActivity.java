@@ -1,5 +1,6 @@
 package com.github.ali.tdsappfirebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -223,7 +226,7 @@ public class HomeActivity extends AppCompatActivity {
                 String mDate = DateFormat.getDateInstance().format(new Date());
                 Data data = new Data(POST_KEY, myName, myDescription, mDate);
                 mDatabaseReference.child(POST_KEY).setValue(data);
-dialog.dismiss();
+                dialog.dismiss();
 
             }
         });
@@ -231,14 +234,34 @@ dialog.dismiss();
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-mDatabaseReference.child(POST_KEY).removeValue();
-dialog.dismiss();
+                mDatabaseReference.child(POST_KEY).removeValue();
+                dialog.dismiss();
             }
         });
 
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.sidemenu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.signout:
+                mFirebaseAuth.signOut();
+                startActivity(new Intent(this,MainActivity.class));
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -266,6 +289,4 @@ dialog.dismiss();
             dateTextView.setText(Date);
         }
     }
-
-
 }

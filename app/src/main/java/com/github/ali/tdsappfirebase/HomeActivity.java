@@ -35,6 +35,11 @@ public class HomeActivity extends AppCompatActivity {
     FloatingActionButton mFloatingActionButton;
     RecyclerView mRecyclerView;
 
+    private String POST_KEY;
+    private String POST_NAME;
+    private String POST_DESCRIPTION;
+
+
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseReference;
 
@@ -59,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-       String uid = mFirebaseUser.getUid();
+        String uid = mFirebaseUser.getUid();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("All Data").child(uid);
 
 
@@ -148,10 +153,20 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseRecyclerAdapter<Data, MyViewHolder> adapter = new FirebaseRecyclerAdapter<Data, MyViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Data model) {
+            protected void onBindViewHolder(@NonNull MyViewHolder holder, final int position, @NonNull final Data model) {
                 holder.setName(model.getName());
                 holder.setDescription(model.getDescription());
                 holder.setDate(model.getDate());
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        POST_KEY = getRef(position).getKey();
+                        POST_NAME = model.getName();
+                        POST_DESCRIPTION = model.getDescription();
+                        updateData();
+                    }
+                });
 
             }
 
@@ -161,7 +176,7 @@ public class HomeActivity extends AppCompatActivity {
 //                View view = LayoutInflater.from(viewGroup.getContext())
 //                        .inflate(R.layout.itemlayoutdesign, viewGroup, false);
 
-                View view = getLayoutInflater().inflate(R.layout.itemlayoutdesign,viewGroup,false);
+                View view = getLayoutInflater().inflate(R.layout.itemlayoutdesign, viewGroup, false);
                 return new MyViewHolder(view);
             }
         };
@@ -169,6 +184,58 @@ public class HomeActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
 
         adapter.startListening();
+
+    }
+
+    private void updateData() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View mView = layoutInflater.inflate(R.layout.updatelayout, null);
+        builder.setView(mView);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+
+
+        final EditText name = mView.findViewById(R.id.name);
+        final EditText description = mView.findViewById(R.id.description);
+
+        name.setText(POST_NAME);
+        name.setSelection(POST_NAME.length());
+        description.setText(POST_DESCRIPTION);
+        description.setSelection(POST_DESCRIPTION.length());
+
+//        String myName = name.getText().toString().trim();
+//        String myDescription = description.getText().toString().trim();
+
+        Button update = mView.findViewById(R.id.buttonUpdate);
+        Button delete = mView.findViewById(R.id.buttonDelete);
+
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String myName = name.getText().toString().trim();
+                String myDescription = description.getText().toString().trim();
+
+                String mDate = DateFormat.getDateInstance().format(new Date());
+                Data data = new Data(POST_KEY, myName, myDescription, mDate);
+                mDatabaseReference.child(POST_KEY).setValue(data);
+dialog.dismiss();
+
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+mDatabaseReference.child(POST_KEY).removeValue();
+dialog.dismiss();
+            }
+        });
+
 
     }
 
